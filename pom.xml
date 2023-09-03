@@ -5,8 +5,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.kvto</groupId>
-    <artifactId>Minterpreter</artifactId>
+    <artifactId>minterpreter</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Mindustack/Minterpreter</url>
+        </repository>
+    </distributionManagement>
+
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
