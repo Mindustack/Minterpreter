@@ -1,5 +1,4 @@
-package org.kvto;
-
+package org.mindustack.minterpreter;
 
 public abstract class InstructionInvoker {
     public static final String AddOperation = "add";

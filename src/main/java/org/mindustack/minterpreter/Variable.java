@@ -1,4 +1,4 @@
-package org.kvto;
+package org.mindustack.minterpreter;
 
 public class Variable {
 
