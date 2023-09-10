@@ -99,7 +99,9 @@ public class Executor {
         if (counter.value >= module.insts.size()) {
             counter.setValue(0);
         }
-        String[] inst = module.insts.get((int) Math.round(counter.value));
+                int start = (int) Math.round(counter.value);
+
+        String[] inst = module.insts.get(start);
         
         // }
         counter.value++;
@@ -113,14 +115,14 @@ public class Executor {
         }
 
 
-        PrintStream.println(dump());
+        PrintStream.println(dump(start));
         
         
         stepper.value++;
         steps--;
     }
 
-    String dump() {
+    String dump(int base) {
 
         var stringBuilder = new StringBuilder();
 
@@ -128,12 +130,11 @@ public class Executor {
                 
                 .append(((int) stepper.value)).append(">\n");
         ArrayList<String[]> insts = module.insts;
-        int start = (int) Math.round(counter.value);
-        for (int i = Integer.max(0, start - 5), instsSize = insts.size(); (i < instsSize) && (i < start + 5); i++) {
+        for (int i = Integer.max(0, base - 5), instsSize = insts.size(); (i < instsSize) && (i < base + 5); i++) {
             String[] inst = insts.get(i);
 
             stringBuilder.append(i).append("\t");
-            if (i == start) {
+            if (i == base) {
                 stringBuilder.append("*");
                 for (String s : inst) {
                     stringBuilder.append(s).append(" ");
