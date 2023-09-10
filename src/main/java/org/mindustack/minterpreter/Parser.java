@@ -8,6 +8,7 @@ public class Parser {
 
         Module module = new Module();
 
+        code=code.trim();
         String[] splitLines = code.split("\n");
 
 
@@ -15,7 +16,7 @@ public class Parser {
             if (line.startsWith("#")) {
                 continue;
             } else if (line.endsWith(":")) {
-                module.labels.put(line.replaceAll("[ :]", ""), module.insts.size());
+                module.labels.put(line.replaceAll("[:]", ""), module.insts.size());
             } else {
                 String[] split = line.split(" ");
                 module.insts.add(split);

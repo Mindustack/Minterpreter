@@ -22,8 +22,8 @@ public class Minterpreter {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            
-            return 1;
+            throw new RuntimeException(e);
+            // return 1;
 
         }
         if ( Math.abs(value - expectation) < 1e-3) {

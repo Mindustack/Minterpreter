@@ -12,18 +12,18 @@ public class Executor {
     HashMap<String, Memory> memories;
     Module module;
 
-    ArrayList<InstructionInvoker> instructionInvokers= new ArrayList<>();
-     boolean jumped = false;
+    ArrayList<InstructionInvoker> instructionInvokers = new ArrayList<>();
+    boolean jumped = false;
     int steps;
     private PrintStream PrintStream;
 
-    Executor(Module module,PrintStream ps) {
-this.PrintStream=ps;
+    Executor(Module module, PrintStream ps) {
+        this.PrintStream = ps;
         counter = new Variable("@counter");
         registers.put("@counter", counter);
         stepper = new Variable("@steper");
         stepper.setValue(1);
-//        registers.put("@stepper", stepper);
+        // registers.put("@stepper", stepper);
         memories = new HashMap<>();
         this.module = module;
         instructionInvokers.add(new opInstInvoker());
@@ -33,20 +33,21 @@ this.PrintStream=ps;
         instructionInvokers.add(new writeInstInvoker());
 
         instructionInvokers.add(new stopInstInvoker());
-        
 
         counter.setValue(0);
         steps = 0;
+
     }
 
     public Memory getMemory(String name) {
-        if(memories.containsKey(name)){
+        if (memories.containsKey(name)) {
             return memories.get(name);
-        }else{Memory memory = new Memory(name);
-memories.put(name,  memory);
-return memory;
+        } else {
+            Memory memory = new Memory(name);
+            memories.put(name, memory);
+            return memory;
         }
-        
+
     }
 
     Variable getRegister(String name) {
@@ -64,9 +65,7 @@ return memory;
                 registers.put(name, result);
             }
 
-
         }
-
 
         return result;
     }
@@ -90,12 +89,11 @@ return memory;
         while (this.steps > 0) {
             execute();
         }
-            return this;
+        return this;
 
     }
 
     void execute() {
-
 
         String[] inst = module.insts.get((int) Math.round(counter.value));
 
@@ -124,7 +122,6 @@ return memory;
 
         var stringBuilder = new StringBuilder();
 
-
         stringBuilder.append("---------------------<").append(((int) stepper.value)).append(">\n");
         ArrayList<String[]> insts = module.insts;
         for (int i = 0, instsSize = insts.size(); i < instsSize; i++) {
@@ -137,10 +134,10 @@ return memory;
                     stringBuilder.append(s).append(" ");
                 }
 
-
                 stringBuilder.append('\n');
                 for (Variable variable : this.registers.values()) {
-                    stringBuilder.append("\t\t\t\t\t\t\t\t\t").append(variable.name).append(':').append(variable.value).append('\n');
+                    stringBuilder.append("\t\t\t\t\t\t\t\t\t").append(variable.name).append(':').append(variable.value)
+                            .append('\n');
                 }
             } else {
                 stringBuilder.append(' ');
@@ -150,14 +147,12 @@ return memory;
                 stringBuilder.append('\n');
             }
 
-
         }
-
 
         return stringBuilder.toString();
     }
 
     public void stop() {
-        this.steps=0;
+        this.steps = 0;
     }
 }
