@@ -1,6 +1,8 @@
 package org.mindustack.minterpreter;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 
 public class Minterpreter {
@@ -13,7 +15,19 @@ public class Minterpreter {
         };
         return 1;
     }
-   
+    public static int test(InputStream inputStream,double expectation,int limit,PrintStream PrintStream){
+        double value;
+        try {
+            value = new Executor(Parser.parse(inputStream),PrintStream).run(limit).getRegister("a0").value;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if ( Math.abs(value - expectation) < 1e-3) {
+            return 0;
+        };
+        return 1;
+    }
 
 //        String code= """
 //                start:
