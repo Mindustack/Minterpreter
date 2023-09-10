@@ -89,7 +89,7 @@ public class Executor {
         while (this.steps > 0) {
             execute();
         }
-
+        
         return this;
 
     }
@@ -100,16 +100,10 @@ public class Executor {
             counter.setValue(0);
         }
         String[] inst = module.insts.get((int) Math.round(counter.value));
-
-        // if (jumped) {
-        //     jumped = false;
-        // } else {
-            
-
-        PrintStream.println(dump());
+        
         // }
         counter.value++;
-        
+        PrintStream.println(dump());
 
         for (InstructionInvoker instructionInvoker : this.instructionInvokers) {
             if (instructionInvoker.check(inst)) {
@@ -117,8 +111,10 @@ public class Executor {
                 break;
             }
         }
-        
 
+        
+        
+        
         stepper.value++;
         steps--;
     }
@@ -128,6 +124,7 @@ public class Executor {
         var stringBuilder = new StringBuilder();
 
         stringBuilder.append("------------------------------------------------------------------------------------<")
+                
                 .append(((int) stepper.value)).append(">\n");
         ArrayList<String[]> insts = module.insts;
         int start = (int) Math.round(counter.value);
