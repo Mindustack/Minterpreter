@@ -1,5 +1,7 @@
 package org.mindustack.minterpreter;
 
+import java.util.ArrayList;
+
 public abstract class InstructionInvoker {
     public static final String AddOperation = "add";
     public static final String SubOperation = "sub";
@@ -24,8 +26,10 @@ public abstract class InstructionInvoker {
     protected static String[] instruction;
     private final String Identifier;
 
+    public static ArrayList<InstructionInvoker> instructionInvokers=new ArrayList<>();
     protected InstructionInvoker(String identifier) {
-        Identifier = identifier;
+       this. Identifier = identifier;
+        instructionInvokers.add(this);
     }
 
     boolean check(String[] inst) {
@@ -56,7 +60,19 @@ class setInstInvoker extends InstructionInvoker {
         r1.setValue(r2);
     }
 }
+class endInstInvoker extends InstructionInvoker {
 
+
+    endInstInvoker() {
+        super("end");
+    }
+
+    @Override
+    void execute(Executor executer) {
+
+        executer.stop();
+    }
+}
 class opInstInvoker extends InstructionInvoker {
 
 
