@@ -1,5 +1,6 @@
 package org.mindustack.minterpreter;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public class Parser {
@@ -24,7 +25,7 @@ public class Parser {
 
         return module;
     }
-    static Module parse(InputStream inputStream) {
+    static Module parse(InputStream inputStream) throws IOException {
 
         Module module = new Module();
 
