@@ -83,7 +83,7 @@ public class Executor {
     }
 
     public Executor run(int steps) {
-        PrintStream.println(" * :logic to be run");
+        PrintStream.println(" * :excuted");
 
         this.steps = steps;
         while (this.steps > 0) {
@@ -103,7 +103,7 @@ public class Executor {
         
         // }
         counter.value++;
-        PrintStream.println(dump());
+        
 
         for (InstructionInvoker instructionInvoker : this.instructionInvokers) {
             if (instructionInvoker.check(inst)) {
@@ -112,7 +112,8 @@ public class Executor {
             }
         }
 
-        
+
+        PrintStream.println(dump());
         
         
         stepper.value++;
