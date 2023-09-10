@@ -89,34 +89,36 @@ public class Executor {
         while (this.steps > 0) {
             execute();
         }
-        
+
         return this;
 
     }
 
     void execute() {
 
-        String[] inst = module.insts.get((int) Math.round(counter.value));
-        if (jumped) {
-            jumped = false;
-        } else {
-            counter.value++;
-
-        }
         if (counter.value >= module.insts.size()) {
             counter.setValue(0);
         }
+        String[] inst = module.insts.get((int) Math.round(counter.value));
+
+        // if (jumped) {
+        //     jumped = false;
+        // } else {
+            
+
         PrintStream.println(dump());
+        // }
+        counter.value++;
+        
+
         for (InstructionInvoker instructionInvoker : this.instructionInvokers) {
             if (instructionInvoker.check(inst)) {
                 instructionInvoker.execute(this);
                 break;
             }
         }
+        
 
-        
-        
-        
         stepper.value++;
         steps--;
     }
@@ -125,10 +127,11 @@ public class Executor {
 
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.append("------------------------------------------------------------------------------------<").append(((int) stepper.value)).append(">\n");
+        stringBuilder.append("------------------------------------------------------------------------------------<")
+                .append(((int) stepper.value)).append(">\n");
         ArrayList<String[]> insts = module.insts;
-        int start=(int) Math.round(counter.value);
-        for (int i=Integer.max(0, start-5), instsSize = insts.size(); (i < instsSize)&&(i < start+5); i++) {
+        int start = (int) Math.round(counter.value);
+        for (int i = Integer.max(0, start - 5), instsSize = insts.size(); (i < instsSize) && (i < start + 5); i++) {
             String[] inst = insts.get(i);
 
             stringBuilder.append(i).append("\t");
