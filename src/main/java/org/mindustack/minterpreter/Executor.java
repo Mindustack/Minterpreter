@@ -1,5 +1,6 @@
 package org.mindustack.minterpreter;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,12 +12,13 @@ public class Executor {
     HashMap<String, Memory> memories;
     Module module;
 
-    ArrayList<InstructionInvoker> instructionInvokers;
+    ArrayList<InstructionInvoker> instructionInvokers=InstructionInvoker.instructionInvokers;
     boolean jumped = false;
     int steps;
+    private PrintStream PrintStream;
 
-    Executor(Module module) {
-
+    Executor(Module module,PrintStream ps) {
+this.PrintStream=ps;
         counter = new Variable("@counter");
         registers.put("@counter", counter);
         stepper = new Variable("@steper");
@@ -26,19 +28,20 @@ public class Executor {
         this.module = module;
 
 
-        instructionInvokers = new ArrayList<>();
-        instructionInvokers.add(new opInstInvoker());
-        instructionInvokers.add(new jumpInstInvoker());
-        instructionInvokers.add(new setInstInvoker());
-        instructionInvokers.add(new readInstInvoker());
-        instructionInvokers.add(new writeInstInvoker());
+        
 
         counter.setValue(0);
         steps = 0;
     }
 
     public Memory getMemory(String name) {
-        return memories.getOrDefault(name, new Memory(name));
+        if(memories.containsKey(name)){
+            return memories.get(name);
+        }else{Memory memory = new Memory(name);
+memories.put(name,  memory);
+return memory;
+        }
+        
     }
 
     Variable getRegister(String name) {
@@ -69,18 +72,21 @@ public class Executor {
         jumped = true;
     }
 
-    public void run() {
+    public Executor run() {
 
         run(1024);
+        return this;
     }
 
-    public void run(int steps) {
-        System.out.println(" * :logic to be run");
+    public Executor run(int steps) {
+        PrintStream.println(" * :logic to be run");
 
         this.steps = steps;
         while (this.steps > 0) {
             execute();
         }
+                return this;
+
     }
 
     void execute() {
@@ -104,7 +110,7 @@ public class Executor {
         if (counter.value >= module.insts.size()) {
             counter.setValue(0);
         }
-        System.out.println(dump());
+        PrintStream.println(dump());
         stepper.value++;
         steps--;
     }
@@ -144,5 +150,9 @@ public class Executor {
 
 
         return stringBuilder.toString();
+    }
+
+    public void stop() {
+        this.steps=0;
     }
 }
