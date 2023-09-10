@@ -97,7 +97,7 @@ public class Executor {
     void execute() {
 
         String[] inst = module.insts.get((int) Math.round(counter.value));
-if (jumped) {
+        if (jumped) {
             jumped = false;
         } else {
             counter.value++;
@@ -106,6 +106,7 @@ if (jumped) {
         if (counter.value >= module.insts.size()) {
             counter.setValue(0);
         }
+        PrintStream.println(dump());
         for (InstructionInvoker instructionInvoker : this.instructionInvokers) {
             if (instructionInvoker.check(inst)) {
                 instructionInvoker.execute(this);
@@ -115,7 +116,7 @@ if (jumped) {
 
         
         
-        PrintStream.println(dump());
+        
         stepper.value++;
         steps--;
     }
