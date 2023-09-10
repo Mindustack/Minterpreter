@@ -97,15 +97,7 @@ public class Executor {
     void execute() {
 
         String[] inst = module.insts.get((int) Math.round(counter.value));
-
-        for (InstructionInvoker instructionInvoker : this.instructionInvokers) {
-            if (instructionInvoker.check(inst)) {
-                instructionInvoker.execute(this);
-                break;
-            }
-        }
-
-        if (jumped) {
+if (jumped) {
             jumped = false;
         } else {
             counter.value++;
@@ -114,6 +106,15 @@ public class Executor {
         if (counter.value >= module.insts.size()) {
             counter.setValue(0);
         }
+        for (InstructionInvoker instructionInvoker : this.instructionInvokers) {
+            if (instructionInvoker.check(inst)) {
+                instructionInvoker.execute(this);
+                break;
+            }
+        }
+
+        
+        
         PrintStream.println(dump());
         stepper.value++;
         steps--;
@@ -137,7 +138,7 @@ public class Executor {
 
                 stringBuilder.append('\n');
                 for (Variable variable : this.registers.values()) {
-                    stringBuilder.append("\t\t\t\t\t\t\t|").append(variable.name).append(':').append(variable.value)
+                    stringBuilder.append("\t\t\t\t\t\t\t\t\t|").append(variable.name).append(':').append(variable.value)
                             .append('\n');
                 }
             } else {
