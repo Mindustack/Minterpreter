@@ -60,11 +60,11 @@ class setInstInvoker extends InstructionInvoker {
         r1.setValue(r2);
     }
 }
-class endInstInvoker extends InstructionInvoker {
+class stopInstInvoker extends InstructionInvoker {
 
 
-    endInstInvoker() {
-        super("end");
+    stopInstInvoker() {
+        super("stop");
     }
 
     @Override

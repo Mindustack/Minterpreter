@@ -12,8 +12,8 @@ public class Executor {
     HashMap<String, Memory> memories;
     Module module;
 
-    ArrayList<InstructionInvoker> instructionInvokers=InstructionInvoker.instructionInvokers;
-    boolean jumped = false;
+    ArrayList<InstructionInvoker> instructionInvokers= new ArrayList<>();
+     boolean jumped = false;
     int steps;
     private PrintStream PrintStream;
 
@@ -26,8 +26,13 @@ this.PrintStream=ps;
 //        registers.put("@stepper", stepper);
         memories = new HashMap<>();
         this.module = module;
+        instructionInvokers.add(new opInstInvoker());
+        instructionInvokers.add(new jumpInstInvoker());
+        instructionInvokers.add(new setInstInvoker());
+        instructionInvokers.add(new readInstInvoker());
+        instructionInvokers.add(new writeInstInvoker());
 
-
+        instructionInvokers.add(new stopInstInvoker());
         
 
         counter.setValue(0);
@@ -85,7 +90,7 @@ return memory;
         while (this.steps > 0) {
             execute();
         }
-                return this;
+            return this;
 
     }
 

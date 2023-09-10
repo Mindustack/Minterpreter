@@ -27,26 +27,18 @@ public class Parser {
     }
     static Module parse(InputStream inputStream) throws IOException {
 
-        Module module = new Module();
-
-
-
-        String[] splitLines = String.valueOf(inputStream.readAllBytes()).split("\n");
-
-
-        for (String line : splitLines) {
-            if (line.startsWith("#")) {
-                continue;
-            } else if (line.endsWith(":")) {
-                module.labels.put(line.replaceAll("[ :]", ""), module.insts.size());
-            } else {
-                String[] split = line.split(" ");
-                module.insts.add(split);
-//
+        byte[] buffer = new byte[1024];
+        String content="";
+            int length;
+            //从输入流中读取数据，直到没有数据为止
+            while ((length = inputStream.read(buffer)) > 0) {
+                //将字节转换为字符串，拼接到内容变量中
+                content += new String(buffer, 0, length);
             }
-        }
-
-        return module;
+            
+            //关闭输入流
+            inputStream.close();
+            return parse(content);
     }
 
 
