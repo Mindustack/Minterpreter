@@ -126,11 +126,12 @@ if (jumped) {
 
         stringBuilder.append("------------------------------------------------------------------------------------<").append(((int) stepper.value)).append(">\n");
         ArrayList<String[]> insts = module.insts;
-        for (int i = 0, instsSize = insts.size(); i < instsSize; i++) {
+        int start=(int) Math.round(counter.value);
+        for (int i=Integer.max(0, start-5), instsSize = insts.size(); (i < instsSize)&&(i < start+5); i++) {
             String[] inst = insts.get(i);
 
             stringBuilder.append(i).append("\t");
-            if (i == (int) Math.round(counter.value)) {
+            if (i == start) {
                 stringBuilder.append("*");
                 for (String s : inst) {
                     stringBuilder.append(s).append(" ");
