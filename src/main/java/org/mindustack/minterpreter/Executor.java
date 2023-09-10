@@ -78,7 +78,7 @@ public class Executor {
 
     public Executor run() {
 
-        run(1024);
+        run(1048576);
         return this;
     }
 
@@ -89,6 +89,7 @@ public class Executor {
         while (this.steps > 0) {
             execute();
         }
+        
         return this;
 
     }
@@ -122,21 +123,21 @@ public class Executor {
 
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.append("---------------------<").append(((int) stepper.value)).append(">\n");
+        stringBuilder.append("------------------------------------------------------------------------------------<").append(((int) stepper.value)).append(">\n");
         ArrayList<String[]> insts = module.insts;
         for (int i = 0, instsSize = insts.size(); i < instsSize; i++) {
             String[] inst = insts.get(i);
 
-            stringBuilder.append(i).append(' ');
+            stringBuilder.append(i).append("\t");
             if (i == (int) Math.round(counter.value)) {
-                stringBuilder.append('*');
+                stringBuilder.append("*");
                 for (String s : inst) {
                     stringBuilder.append(s).append(" ");
                 }
 
                 stringBuilder.append('\n');
                 for (Variable variable : this.registers.values()) {
-                    stringBuilder.append("\t\t\t\t\t\t\t\t\t").append(variable.name).append(':').append(variable.value)
+                    stringBuilder.append("\t\t\t\t\t\t\t|").append(variable.name).append(':').append(variable.value)
                             .append('\n');
                 }
             } else {

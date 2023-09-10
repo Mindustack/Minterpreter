@@ -17,6 +17,9 @@ public class Parser {
                 continue;
             } else if (line.endsWith(":")) {
                 module.labels.put(line.replaceAll("[:]", ""), module.insts.size());
+            }else if(line.equals("")){
+
+                continue;
             } else {
                 String[] split = line.split(" ");
                 module.insts.add(split);
