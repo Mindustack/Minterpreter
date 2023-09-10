@@ -1,12 +1,14 @@
 package org.mindustack.minterpreter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Memory {
     ArrayList<Double> mem;
 
     public Memory(String name) {
-        mem = new ArrayList<>(512);
+        mem =  new ArrayList<>(Collections.nCopies(512, 0.0));
+        
     }
 
     public double read(int index) {
