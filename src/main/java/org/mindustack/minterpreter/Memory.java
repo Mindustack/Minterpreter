@@ -2,28 +2,40 @@ package org.mindustack.minterpreter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+class MemoryFactory {
+  Map<Long, Memory> memories = new HashMap<>();
+
+  MemoryFactory() {
+  }
+
+  public Memory getMem(Variable memoryIndex) {
+    if (memories.containsKey(memoryIndex.asInteger())) {
+      return memories.get(memoryIndex.asInteger());
+    }
+    Memory m = new Memory();
+    memories.put(memoryIndex.asInteger(), m);
+    return m;
+
+  }
+
+}
 
 public class Memory {
-    ArrayList<Double> mem;
+  List<Double> mem;
 
-    public Memory(String name) {
-        mem =  new ArrayList<>(Collections.nCopies(512, 0.0));
-        
-    }
+  protected Memory() {
+    mem = new ArrayList<Double>(Collections.nCopies(512, 0.0));
+  }
 
-    public double read(int index) {
-        return mem.get(index);
-    }
+  public void read(Variable ret, Variable index) {
+    ret.value = mem.get((int) index.asInteger());
+  }
 
-    public double read(double index) {
-        return mem.get((int) Math.round(index));
-    }
-
-    public void write(int index, double value) {
-        mem.set(index, value);
-    }
-
-    public void write(double index, double value) {
-        mem.set((int) Math.round(index), value);
-    }
+  public void write(Variable source, Variable index) {
+    mem.set((int) index.asInteger(), source.value);
+  }
 }

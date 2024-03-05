@@ -1,104 +1,119 @@
 package org.mindustack.minterpreter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Minterpreter {
+  public List<Instruction> instructions = new ArrayList<>();
+  public Map<String, Instruction> labels = new HashMap<>();
+  public VariableFactory varFctr;
+  public MemoryFactory memFctr;
 
-	public static int test(String code, double expectation, int limit, PrintStream PrintStream) {
-		double value = new Executor(Parser.parse(code), PrintStream).run(limit).getRegister("a0").value;
+  public Minterpreter() {
+    this.memFctr = new MemoryFactory();
+    this.varFctr = new VariableFactory();
+  }
 
-		if (Math.abs(value - expectation) < 1e-3) {
-			return 0;
-		}
-		;
-		return 1;
-	}
+  public Minterpreter parse(String source) {
 
-	public static int test(InputStream inputStream, double expectation, int limit, PrintStream PrintStream) {
-		byte[] buffer = new byte[1024];
-		String content = "";
-		int length;
-		// 从输入流中读取数据，直到没有数据为止
-		try {
-			while ((length = inputStream.read(buffer)) > 0) {
-				// 将字节转换为字符串，拼接到内容变量中
-				content += new String(buffer, 0, length);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    source = source.trim();
+    String[] splitLines = source.split("\n");
+    String[] split;
+    String label = null;
+    for (String line : splitLines) {
+      if (line.startsWith("#") || line.startsWith("//")) {
+        continue;
+      } else if (line.endsWith(":")) {
+        label = line.replaceAll("[:]", "");
 
-		// 关闭输入流
+      } else if (line.equals("")) {
 
-		return test(content, expectation, limit, PrintStream);
-	}
+        continue;
+      } else {
+        Instruction instruction = null;
+        split = line.split(" ");
 
-	// String code= """
-	// start:
-	// op add s d 1
-	// set d s
-	// jump start LessThan d 5
-	// set f 1
-	// """;
-	//
-	// var module = Parser.parse(code);
-	// var executor = new Executor(module);
-	// executor.run(32);
+        // System.out.println(Arrays.toString(split));
+        switch (split[0]) {
 
-	public List<Instruction> instructions = new ArrayList<>();
-	public Map<String, Instruction> labels = new HashMap<>();
+          case "op" -> {
+            //System.out.println(Arrays.toString(split));
+            instruction = new ALUinst(
+                split[1],
+                this.varFctr.getVar(split[2]),
+                this.varFctr.getVar(split.length < 4 ? null : split[3]),
+                this.varFctr.getVar(split.length < 5 ? null : split[4]));
+          }
+          case "set" -> {
+            instruction = new SetInst(this.varFctr.getVar(split[1]),
+                this.varFctr.getVar(split[2]));
+          }
+          case "stop" -> {
+            instruction = new StopInst();
+          }
+          case "jump" -> {
 
-	public List<Instruction> parse(String source) {
-		source = source.trim();
-		String[] splitLines = source.split("\n");
-		String label = null;
-		for (String line : splitLines) {
-			if (line.startsWith("#")) {
-				continue;
-			} else if (line.endsWith(":")) {
-				label = line.replaceAll("[:]", "");
+            instruction = new JmpInst(split[1],
+                split[2],
+                this.varFctr.getVar(split.length < 4 ? null : split[3]),
+                this.varFctr.getVar(split.length < 5 ? null : split[4]));
+          }
+          case "write" -> {
+  //System.out.println(Arrays.toString(split));
+            instruction = new WriteInst(
+                this.varFctr.getVar(split[1]),
+                this.varFctr.getVar(split[2]),
+                this.varFctr.getVar(split[3]));
+          }
+          case "read" -> {
+  //System.out.println(Arrays.toString(split));
+            instruction = new ReadInst(
+                this.varFctr.getVar(split[1]),
+                this.varFctr.getVar(split[2]),
+                this.varFctr.getVar(split[3]));
+          }
+          default -> {
+            throw new RuntimeException("invalid inst:" + Arrays.toString(split));
+          }
+        }
 
-			} else if (line.equals("")) {
+        if (label != null) {
 
-				continue;
-			} else {
-				Instruction instruction;
-				String[] split = line.split(" ");
-				switch (split[0]) {
+          labels.put(label, instruction);
+          label = null;
+        }
+        instructions.add(instruction);
+      }
+    }
 
-					case "op": {
-						instruction = new ALUinst(
-								split[1],
-								Variable.getVar(split[2]),
-								Variable.getVar(split[3]),
-								Variable.getVar(split[4]));
-					}
-					case "set": {
-						instruction = new SetInst(Variable.getVar(split[1]),
-								Variable.getVar(split[2]));
-					}
-					case "jump": {
-						instruction = new JmpInst(split[1], split[2], Variable.getVar(split[3]),
-								Variable.getVar(split[4]));
-					}
-						if (label != null) {
-							labels.put(label, instruction);
-							label = null;
-						}
+    return this;
+  }
 
-						instructions.add(instruction);
-				}
-			}
+  Variable counter;
 
-		}
-		return instructions;
-	}
+  public Minterpreter run() {
+    Instruction inst;
 
+    counter = this.varFctr.getVar("@counter");
+    int step = 0;
+    while (step < 1024) {
+
+      inst = instructions.get((int) counter.asInteger());
+      inst.execute(this);
+      step++;
+      counter.value++;
+      if (counter.value >= instructions.size())
+        break;
+    }
+    return this;
+
+  }
+
+  public double getRet() {
+    return this.varFctr.getVar("ret").value;
+  }
 }
