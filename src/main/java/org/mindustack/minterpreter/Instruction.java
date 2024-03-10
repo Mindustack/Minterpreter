@@ -5,20 +5,39 @@
  */
 package org.mindustack.minterpreter;
 
+import java.util.Optional;
+
 public abstract class Instruction {
   public Variable r2;
   public Variable r1;
   public Variable ret;
+  int index;
 
-  abstract void execute(Minterpreter env);
+  public String op;
+
+  @Override
+  public String toString() {
+    return this.index + ": " + this.getClass().getSimpleName()
+        + (this.op == null ? ""
+            : (' ' + this.op + ':' ))
+        + (this.ret == null ? ""
+            : (' ' + this.ret.name + ':' + this.ret.value))
+        + (this.r1 == null ? ""
+            : (' ' + this.r1.name + ':' + this.r1.value))
+        + (this.r2 == null ? "" : (' ' + this.r2.name + ':' + this.r2.value))
+
+    ;
+  };
+
+  void execute(Minterpreter env) {
+  }
 
 }
 
 class ALUinst extends Instruction {
-  public String op;
 
-  public ALUinst(String op, Variable ret, Variable r1, Variable r2) {
-
+  public ALUinst(int index, String op, Variable ret, Variable r1, Variable r2) {
+    this.index = index;
     this.op = op;
     this.ret = ret;
     this.r1 = r1;
@@ -78,11 +97,13 @@ class ALUinst extends Instruction {
         throw new RuntimeException("invalid operation:" + op);
       }
     }
+    env.counter.value++;
   }
 }
 
 class SetInst extends Instruction {
-  public SetInst(Variable ret, Variable r1) {
+  public SetInst(int index, Variable ret, Variable r1) {
+    this.index = index;
     this.ret = ret;
     this.r1 = r1;
 
@@ -91,24 +112,26 @@ class SetInst extends Instruction {
   @Override
   void execute(Minterpreter env) {
     this.ret.value = r1.value;
+    env.counter.value++;
   }
 }
 
 class StopInst extends Instruction {
-  public StopInst() {
+  public StopInst(int index) {
+    this.index = index;
   }
 
   @Override
   void execute(Minterpreter env) {
-    (env.counter.value)--;
+    env.counter.value=-1;
   }
 }
 
 class JmpInst extends Instruction {
   public String label;
-  public String op;
 
-  public JmpInst(String label, String op, Variable r1, Variable r2) {
+  public JmpInst(int index, String label, String op, Variable r1, Variable r2) {
+    this.index = index;
     this.label = label;
     this.op = op;
     this.r1 = r2;
@@ -154,33 +177,36 @@ class JmpInst extends Instruction {
       }
     }
     if (jmp)
-      env.counter.value = env.instructions.indexOf(env.labels.get(this.label)) - 1;
+      env.counter.value = env.labels.get(this.label).index;
   }
 }
 
 class ReadInst extends Instruction {
-  public ReadInst(Variable data, Variable memory, Variable index) {
+  public ReadInst(int index, Variable data, Variable memory, Variable ptr) {
+    this.index = index;
     this.ret = data;
     this.r1 = memory;
-    this.r2 = index;
+    this.r2 = ptr;
   }
 
   @Override
   void execute(Minterpreter env) {
     env.memFctr.getMem(r1).read(ret, r2);
-    //System.out.println(r1.value + "r" + r2.value);
+    env.counter.value++;
   }
 }
 
 class WriteInst extends Instruction {
-  public WriteInst(Variable ret, Variable memory, Variable index) {
+  public WriteInst(int index, Variable ret, Variable memory, Variable ptr) {
+    this.index = index;
     this.ret = ret;
     this.r1 = memory;
-    this.r2 = index;
+    this.r2 = ptr;
   }
 
   @Override
   void execute(Minterpreter env) {
     env.memFctr.getMem(r1).write(ret, r2);
+    env.counter.value++;
   }
 }

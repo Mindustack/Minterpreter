@@ -1,29 +1,50 @@
 package org.mindustack.minterpreter;
 
-import java.lang.reflect.Array;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 public class Minterpreter {
   public List<Instruction> instructions = new ArrayList<>();
   public Map<String, Instruction> labels = new HashMap<>();
   public VariableFactory varFctr;
   public MemoryFactory memFctr;
-
   public Minterpreter() {
     this.memFctr = new MemoryFactory();
     this.varFctr = new VariableFactory();
+
+    logger.info("minterpreter started");
   }
 
-  public Minterpreter parse(String source) {
+  public static Logger logger = Logger.getLogger("Minterpreter");
+  static {
+    try {
+      FileHandler fileHandler = new FileHandler("log.txt");
+      logger.addHandler(fileHandler);
+      fileHandler.setFormatter(new SimpleFormatter());
+    } catch (SecurityException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
+  /**
+   * 
+   * @param source mindustry logic plain code
+   * @return itself for continue use
+   */
+  public Minterpreter parse(String source) {
     source = source.trim();
     String[] splitLines = source.split("\n");
     String[] split;
     String label = null;
+    int count = 0;
     for (String line : splitLines) {
       if (line.startsWith("#") || line.startsWith("//")) {
         continue;
@@ -37,48 +58,54 @@ public class Minterpreter {
         Instruction instruction = null;
         split = line.split(" ");
 
-        // System.out.println(Arrays.toString(split));
         switch (split[0]) {
 
           case "op" -> {
-            //System.out.println(Arrays.toString(split));
             instruction = new ALUinst(
+                count,
                 split[1],
                 this.varFctr.getVar(split[2]),
                 this.varFctr.getVar(split.length < 4 ? null : split[3]),
                 this.varFctr.getVar(split.length < 5 ? null : split[4]));
           }
           case "set" -> {
-            instruction = new SetInst(this.varFctr.getVar(split[1]),
+            instruction = new SetInst(
+                count,
+                this.varFctr.getVar(split[1]),
                 this.varFctr.getVar(split[2]));
           }
           case "stop" -> {
-            instruction = new StopInst();
+            instruction = new StopInst(count);
           }
           case "jump" -> {
 
-            instruction = new JmpInst(split[1],
+            if (split[2].matches("[0-9]*"))
+              logger
+                  .warning("minterpreter does not support number jmp ,are you using number as label? that's not nice");
+            instruction = new JmpInst(count,
+                split[1],
+
                 split[2],
                 this.varFctr.getVar(split.length < 4 ? null : split[3]),
                 this.varFctr.getVar(split.length < 5 ? null : split[4]));
           }
           case "write" -> {
-  //System.out.println(Arrays.toString(split));
-            instruction = new WriteInst(
+            instruction = new WriteInst(count,
                 this.varFctr.getVar(split[1]),
                 this.varFctr.getVar(split[2]),
                 this.varFctr.getVar(split[3]));
           }
           case "read" -> {
-  //System.out.println(Arrays.toString(split));
-            instruction = new ReadInst(
+            instruction = new ReadInst(count,
                 this.varFctr.getVar(split[1]),
                 this.varFctr.getVar(split[2]),
                 this.varFctr.getVar(split[3]));
           }
           default -> {
+            logger.severe("can't parse: " + line);
             throw new RuntimeException("invalid inst:" + Arrays.toString(split));
           }
+
         }
 
         if (label != null) {
@@ -87,6 +114,8 @@ public class Minterpreter {
           label = null;
         }
         instructions.add(instruction);
+        count++;
+        logger.info("parsed: " + line + " as: " + instruction.toString());
       }
     }
 
@@ -95,24 +124,42 @@ public class Minterpreter {
 
   Variable counter;
 
+  /**
+   * run logic code for limited steps default 1024
+   * 
+   * @return
+   */
   public Minterpreter run() {
+    return run(1024);
+  }
+
+  /**
+   * run logic code for limited steps default 1024
+   * 
+   * @param stepLimit
+   * @return
+   */
+  public Minterpreter run(int stepLimit) {
     Instruction inst;
 
     counter = this.varFctr.getVar("@counter");
     int step = 0;
-    while (step < 1024) {
+    while (step < stepLimit) {
 
       inst = instructions.get((int) counter.asInteger());
       inst.execute(this);
+      logger.info(inst.toString());
       step++;
-      counter.value++;
-      if (counter.value >= instructions.size())
+      if (counter.value >= instructions.size()||counter.value<0)
         break;
     }
     return this;
 
   }
 
+  /**
+   * @return return the value in 'ret' variable to vertify
+   */
   public double getRet() {
     return this.varFctr.getVar("ret").value;
   }

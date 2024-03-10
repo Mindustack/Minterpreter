@@ -1,17 +1,12 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.mindustack.minterpreter.Minterpreter;
 
 public class Test {
 
-  @BeforeAll
-  public static void setup() throws FileNotFoundException {
-    System.setOut(new PrintStream("./output.txt"));
-  }
 
   @org.junit.jupiter.api.Test
   public void testJmp() {
@@ -44,7 +39,7 @@ public class Test {
   public void testRW() {
 
     assertEquals(2, new Minterpreter()
-        .parse("write 2 0 1\nread ret 0 1")
+        .parse("write 2 memory5 1\nread ret memory5 1")
         .run()
         .getRet());
   }
