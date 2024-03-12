@@ -21,8 +21,9 @@ public class Minterpreter {
     logger.info("minterpreter started");
   }
 
-  public static Logger logger = Logger.getLogger("Minterpreter");
+  public static Logger logger;
   static {
+logger = Logger.getLogger("Minterpreter");
     try {
       FileHandler fileHandler = new FileHandler("log.txt");
       logger.addHandler(fileHandler);

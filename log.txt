@@ -1,60 +1,60 @@
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter <init>
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter <init>
 INFO: minterpreter started
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: jump begin always as: 0: JmpInst always:
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: set ret 1 as: 1: SetInst ret:0.0 _const:1.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: stop as: 2: StopInst
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: set ret 2 as: 3: SetInst ret:0.0 _const:2.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: jump start equal ret 2 as: 4: JmpInst equal: _const:2.0 _const:2.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 0: JmpInst always:
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 3: SetInst ret:2.0 _const:2.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 4: JmpInst equal: _const:2.0 _const:2.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 1: SetInst ret:1.0 _const:1.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 2: StopInst
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter <init>
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter <init>
 INFO: minterpreter started
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: op add a0 a0 1 as: 0: ALUinst add: a0:0.0 a0:0.0 _const:1.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: set a1 a0 as: 1: SetInst a1:0.0 a0:0.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: jump start lessThan a1 5 as: 2: JmpInst lessThan: _const:5.0 _const:5.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:46 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: op sub a0 a0 a1 as: 3: ALUinst sub: a0:0.0 a0:0.0 a1:0.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: write 2 m0 a0 as: 4: WriteInst _const:2.0 m0:0.0 a0:0.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: read a1 m0 2 as: 5: ReadInst a1:0.0 m0:0.0 _const:2.0
-Mar 10, 2024 12:56:14 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: stop as: 6: StopInst
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter <init>
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter <init>
 INFO: minterpreter started
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: op add ret 1 1 as: 0: ALUinst add: ret:0.0 _const:1.0 _const:1.0
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 0: ALUinst add: ret:2.0 _const:1.0 _const:1.0
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter <init>
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter <init>
 INFO: minterpreter started
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: write 2 memory5 1 as: 0: WriteInst _const:2.0 memory5:5.0 _const:1.0
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: read ret memory5 1 as: 1: ReadInst ret:0.0 memory5:5.0 _const:1.0
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 0: WriteInst _const:2.0 memory5:5.0 _const:1.0
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 1: ReadInst ret:2.0 memory5:5.0 _const:1.0
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter <init>
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter <init>
 INFO: minterpreter started
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter parse
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter parse
 INFO: parsed: set ret 1 as: 0: SetInst ret:0.0 _const:1.0
-Mar 10, 2024 12:56:15 PM org.mindustack.minterpreter.Minterpreter run
+Mar 13, 2024 1:07:47 AM org.mindustack.minterpreter.Minterpreter run
 INFO: 0: SetInst ret:1.0 _const:1.0
